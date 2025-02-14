@@ -14,7 +14,7 @@ namespace LoadingTips.Patches
         [HarmonyPostfix]
         public static void HudStart(HUDManager __instance)
         {
-            InitializeText(__instance.loadingText.transform);
+            InitializeText(__instance.loadingText.transform.parent);
         }
 
         [HarmonyPatch(typeof(RoundManager), nameof(RoundManager.GenerateNewLevelClientRpc))]
@@ -41,11 +41,11 @@ namespace LoadingTips.Patches
             transform.anchorMin = new Vector2(0.5f, 0.5f);
             transform.anchorMax = new Vector2(0.5f, 0.5f);
             transform.sizeDelta = new Vector2(500f, 100f);
-            transform.anchoredPosition3D = new Vector3(0f, -70f, 0f);
+            transform.anchoredPosition3D = new Vector3(0f, -200f, 0f);
             
             var tipsText = _tipsObject.GetComponent<TextMeshProUGUI>();
-            tipsText.font = HUDManager.Instance.spectatorTipText.font;
-            tipsText.fontMaterial = HUDManager.Instance.spectatorTipText.fontMaterial;
+            tipsText.font = HUDManager.Instance.loadingText.font;
+            tipsText.fontMaterial = HUDManager.Instance.loadingText.fontMaterial;
             tipsText.fontSize = 18;
             tipsText.horizontalAlignment = HorizontalAlignmentOptions.Center;
             tipsText.enableWordWrapping = true;

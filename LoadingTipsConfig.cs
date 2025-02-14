@@ -11,6 +11,7 @@ namespace LoadingTips
     internal class LoadingTipsConfig
     {
         public ConfigEntry<string> TipPrefix { get; }
+        public ConfigEntry<bool> RandomizeTip { get; }
 
         public IReadOnlyList<string> Tips => _tips.AsReadOnly();
         private readonly List<string> _tips = [];
@@ -24,6 +25,8 @@ namespace LoadingTips
         {
             TipPrefix = config.Bind("General", nameof(TipPrefix), string.Empty,
                 "This text will precede all loading screen tips (e.g. TIP: My Tip Here)");
+            RandomizeTip = config.Bind("General", nameof(RandomizeTip), true,
+                "Whether to show a random tip from the list every time it is shown or show them sequentially.");
             
             LoadTips();
         }

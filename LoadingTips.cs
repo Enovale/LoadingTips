@@ -14,7 +14,7 @@ public class LoadingTips : BaseUnityPlugin
     internal new static ManualLogSource Logger { get; private set; } = null!;
     internal static Harmony? Harmony { get; set; }
     
-    internal new static LoadingTipsConfig Config { get; set; } = null!;
+    internal new static LoadingTipsConfig Config { get; private set; } = null!;
 
     private void Awake()
     {
