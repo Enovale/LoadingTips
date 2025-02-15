@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using BepInEx;
 using BepInEx.Configuration;
+using LethalConfig;
+using LethalConfig.ConfigItems;
 
 namespace LoadingTips
 {
@@ -34,6 +37,13 @@ namespace LoadingTips
         [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
         internal void InitializeLethalConfig()
         {
+            var tipPrefixField = new TextInputFieldConfigItem(TipPrefix, false);
+            LethalConfigManager.AddConfigItem(tipPrefixField);
+            var randomizeTipField = new BoolCheckBoxConfigItem(RandomizeTip, false);
+            LethalConfigManager.AddConfigItem(randomizeTipField);
+            var reloadTipsButton = new GenericButtonConfigItem("General", "Reload Tips",
+                "Reloads the tips from the txt file in BepInEx/config/LoadingTips.txt", "Reload", LoadTips);
+            LethalConfigManager.AddConfigItem(reloadTipsButton);
         }
 
         public void LoadTips()
@@ -53,7 +63,8 @@ namespace LoadingTips
 
             try
             {
-                _tips.AddRange(File.ReadAllLines(_tipsPath, Encoding.UTF8));
+                var rawLines = File.ReadAllLines(_tipsPath);
+                _tips.AddRange(rawLines.Select(l => l.UseAsSpan(0, 100).ToString().Trim().Split("##").First()).Where(l => !string.IsNullOrWhiteSpace(l)));
             }
             catch (Exception e)
             {

@@ -20,11 +20,16 @@ namespace LoadingTips.Patches
         [HarmonyPatch(typeof(RoundManager), nameof(RoundManager.GenerateNewLevelClientRpc))]
         [HarmonyPatch(typeof(RoundManager), nameof(RoundManager.FinishGeneratingNewLevelClientRpc))]
         [HarmonyPatch(typeof(StartOfRound), nameof(StartOfRound.SceneManager_OnLoadComplete1))]
+        [HarmonyPatch(typeof(StartOfRound), nameof(StartOfRound.SceneManager_OnLoad))]
         [HarmonyPatch(typeof(StartOfRound), nameof(StartOfRound.openingDoorsSequence), MethodType.Enumerator)]
+        [HarmonyPatch(typeof(StartOfRound), nameof(StartOfRound.waitingForOtherPlayersToRevive), MethodType.Enumerator)]
         [HarmonyPostfix]
         public static void DarkenHudChanged()
         {
-            _tipsObject?.SetActive(HUDManager.Instance.loadingDarkenScreen.enabled);
+            _tipsObject?.SetActive(HUDManager.Instance.loadingText.enabled);
+            
+            // Vanilla game doesn't show the darkened overlay immediately for some reason, let's fix that
+            HUDManager.Instance.loadingDarkenScreen.enabled = HUDManager.Instance.loadingText.enabled;
         }
 
         private static void InitializeText(Transform parent)
@@ -45,12 +50,12 @@ namespace LoadingTips.Patches
             
             var tipsText = _tipsObject.GetComponent<TextMeshProUGUI>();
             tipsText.font = HUDManager.Instance.loadingText.font;
-            tipsText.fontMaterial = HUDManager.Instance.loadingText.fontMaterial;
+            tipsText.font.fallbackFontAssetTable.Add(HUDManager.Instance.controlTipLines[0].font);
             tipsText.fontSize = 18;
             tipsText.horizontalAlignment = HorizontalAlignmentOptions.Center;
             tipsText.enableWordWrapping = true;
-            // Same as lethal's loading text
-            tipsText.color = new Color(0.6462264f, 0.95584375f, 1f, 0.5529412f);
+            tipsText.overflowMode = TextOverflowModes.Masking;
+            tipsText.color = HUDManager.Instance.loadingText.color;
         }
     }
 }

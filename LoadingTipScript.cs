@@ -8,7 +8,7 @@ namespace LoadingTips
     internal class LoadingTipScript : MonoBehaviour
     {
         private TextMeshProUGUI _text = null!;
-        private static int _tipIndex;
+        private static int _tipIndex = -1;
         
         private void Awake()
         {
@@ -20,17 +20,37 @@ namespace LoadingTips
             if (LoadingTips.Config.RandomizeTip.Value)
                 SetRandomTip();
             else
-                SetTip(_tipIndex);
+                SetTip(_tipIndex++);
         }
 
         public void SetRandomTip()
         {
-            var rand = LoadingTips.Config.Tips[Random.Range(0, LoadingTips.Config.Tips.Count)];
+            if (LoadingTips.Config.Tips.Count <= 0)
+            {
+                LoadingTips.Logger.LogError("Tips are empty, can't set tip");
+                return;
+            }
+            
+            var index = Random.Range(0, LoadingTips.Config.Tips.Count);
+            var rand = LoadingTips.Config.Tips[index];
+            while (LoadingTips.Config.Tips.Count > 1 && index == _tipIndex)
+            {
+                index = Random.Range(0, LoadingTips.Config.Tips.Count);
+                rand = LoadingTips.Config.Tips[index];
+            }
+
             SetTip(rand);
+            _tipIndex = index;
         }
 
         public void SetTip(int tipIndex)
         {
+            if (LoadingTips.Config.Tips.Count <= 0)
+            {
+                LoadingTips.Logger.LogError("Tips are empty, can't set tip");
+                return;
+            }
+            
             tipIndex = Math.Clamp(tipIndex, 0, LoadingTips.Config.Tips.Count - 1);
             SetTip(LoadingTips.Config.Tips[tipIndex]);
         }
@@ -38,7 +58,6 @@ namespace LoadingTips
         public void SetTip(string tip)
         {
             _text.text = LoadingTips.Config.TipPrefix.Value + tip;
-            _tipIndex++;
         }
     }
 }
