@@ -32,14 +32,10 @@ namespace LoadingTips
             }
             
             var index = Random.Range(0, LoadingTips.Config.Tips.Count);
-            var rand = LoadingTips.Config.Tips[index];
             while (LoadingTips.Config.Tips.Count > 1 && index == _tipIndex)
-            {
                 index = Random.Range(0, LoadingTips.Config.Tips.Count);
-                rand = LoadingTips.Config.Tips[index];
-            }
 
-            SetTip(rand);
+            SetTip(index);
             _tipIndex = index;
         }
 
