@@ -14,6 +14,10 @@
         </PropertyGroup>
     </Target>
 
+    <Target Name="UpdateManifestVersion" AfterTargets="AddGeneratedFile" DependsOnTargets="MinVer">
+        <Exec Command="sed -i '/&quot;version_number&quot;/s/.*/  &quot;version_number&quot;: &quot;$(PlainVersion)&quot;/' $(MSBuildProjectDirectory)/manifest.json" />
+    </Target>
+
     <!-- Project Properties -->
     <PropertyGroup>
         <TargetFramework>netstandard2.1</TargetFramework>

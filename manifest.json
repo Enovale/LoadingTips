@@ -1,0 +1,16 @@
+{
+  "manifestVersion": 1,
+  "name": "Enova-LoadingTips",
+  "authorName": "Enova",
+  "website_url": "https://github.com/Enovale/LoadingTips",
+  "displayName": "Loading Tips",
+  "description": "Shows tips when the moon is loading.",
+  "dependencies": [
+  ],
+  "incompatibilities": [],
+  "optionalDependencies": [
+    "AinaVT-LethalConfig-1.4.4",
+    "BMX-LobbyCompatibility-1.3.0"
+  ],
+  "version_number": "1.1.2"
+}
