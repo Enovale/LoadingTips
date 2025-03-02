@@ -6,4 +6,4 @@ A Lethal Company mod that adds randomized loading tips to the darkened loading s
 
 This mod's concept is entirely based on [AutoMessage](https://thunderstore.io/c/lethal-company/p/hoffr/AutoMessage/) by [hoffr](https://thunderstore.io/c/lethal-company/p/hoffr/).
 I really just did not like the implementation of the concept and the limitations it has, so I wanted to try it myself.  
-Icon made by a friend of mine
+Icon made by [buckly90](https://github.com/buckly90)

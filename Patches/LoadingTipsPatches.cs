@@ -26,7 +26,16 @@ namespace LoadingTips.Patches
         [HarmonyPostfix]
         public static void DarkenHudChanged()
         {
-            _tipsObject?.SetActive(HUDManager.Instance.loadingText.enabled);
+            if (_tipsObject == null ||
+                HUDManager.Instance == null ||
+                StartOfRound.Instance == null ||
+                RoundManager.Instance == null ||
+                StartOfRound.Instance.shipHasLanded ||
+                StartOfRound.Instance.shipDoorsEnabled ||
+                RoundManager.Instance.dungeonCompletedGenerating)
+                return;
+            
+            _tipsObject.SetActive(HUDManager.Instance.loadingText.enabled);
             
             // Vanilla game doesn't show the darkened overlay immediately for some reason, let's fix that
             HUDManager.Instance.loadingDarkenScreen.enabled = HUDManager.Instance.loadingText.enabled;
