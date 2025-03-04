@@ -29,16 +29,20 @@ namespace LoadingTips.Patches
             if (_tipsObject == null ||
                 HUDManager.Instance == null ||
                 StartOfRound.Instance == null ||
-                RoundManager.Instance == null ||
+                RoundManager.Instance == null)
+                return;
+
+            var shouldEnable = HUDManager.Instance.loadingText.enabled;
+            if (shouldEnable && (
                 StartOfRound.Instance.shipHasLanded ||
                 StartOfRound.Instance.shipDoorsEnabled ||
-                RoundManager.Instance.dungeonCompletedGenerating)
+                RoundManager.Instance.dungeonCompletedGenerating))
                 return;
             
-            _tipsObject.SetActive(HUDManager.Instance.loadingText.enabled);
+            _tipsObject.SetActive(shouldEnable);
             
             // Vanilla game doesn't show the darkened overlay immediately for some reason, let's fix that
-            HUDManager.Instance.loadingDarkenScreen.enabled = HUDManager.Instance.loadingText.enabled;
+            HUDManager.Instance.loadingDarkenScreen.enabled = shouldEnable;
         }
 
         private static void InitializeText(Transform parent)
