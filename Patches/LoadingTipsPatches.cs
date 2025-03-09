@@ -17,32 +17,34 @@ namespace LoadingTips.Patches
             InitializeText(__instance.loadingText.transform.parent);
         }
 
-        [HarmonyPatch(typeof(RoundManager), nameof(RoundManager.GenerateNewLevelClientRpc))]
-        [HarmonyPatch(typeof(RoundManager), nameof(RoundManager.FinishGeneratingNewLevelClientRpc))]
-        [HarmonyPatch(typeof(StartOfRound), nameof(StartOfRound.SceneManager_OnLoadComplete1))]
-        [HarmonyPatch(typeof(StartOfRound), nameof(StartOfRound.SceneManager_OnLoad))]
-        [HarmonyPatch(typeof(StartOfRound), nameof(StartOfRound.openingDoorsSequence), MethodType.Enumerator)]
-        [HarmonyPatch(typeof(StartOfRound), nameof(StartOfRound.waitingForOtherPlayersToRevive), MethodType.Enumerator)]
+        [HarmonyPatch(typeof(TextMeshProUGUI), nameof(TextMeshProUGUI.OnEnable))]
         [HarmonyPostfix]
-        public static void DarkenHudChanged()
+        public static void OnTextMeshEnabled(TextMeshProUGUI __instance)
         {
-            if (_tipsObject == null ||
-                HUDManager.Instance == null ||
-                StartOfRound.Instance == null ||
-                RoundManager.Instance == null)
+            if (__instance == HUDManager.Instance?.loadingText)
+                LoadingTextActiveChanged(true);
+        }
+
+        [HarmonyPatch(typeof(TextMeshProUGUI), nameof(TextMeshProUGUI.OnDisable))]
+        [HarmonyPostfix]
+        public static void OnTextMeshDisabled(TextMeshProUGUI __instance)
+        {
+            if (__instance == HUDManager.Instance?.loadingText)
+                LoadingTextActiveChanged(false);
+        }
+
+        private static void LoadingTextActiveChanged(bool active)
+        {
+            if (_tipsObject == null)
                 return;
 
-            var shouldEnable = HUDManager.Instance.loadingText.enabled;
-            if (shouldEnable && (
-                StartOfRound.Instance.shipHasLanded ||
-                StartOfRound.Instance.shipDoorsEnabled ||
-                RoundManager.Instance.dungeonCompletedGenerating))
+            if (active && StartOfRound.Instance.shipDoorsEnabled)
                 return;
             
-            _tipsObject.SetActive(shouldEnable);
+            _tipsObject.SetActive(active);
             
             // Vanilla game doesn't show the darkened overlay immediately for some reason, let's fix that
-            HUDManager.Instance.loadingDarkenScreen.enabled = shouldEnable;
+            HUDManager.Instance.loadingDarkenScreen.enabled = active;
         }
 
         private static void InitializeText(Transform parent)
