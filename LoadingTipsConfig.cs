@@ -64,7 +64,7 @@ namespace LoadingTips
             try
             {
                 var rawLines = File.ReadAllLines(_tipsPath);
-                _tips.AddRange(rawLines.Select(l => l.UseAsSpan(0, 100).ToString().Trim().Split("##").First().Replace("\\n", Environment.NewLine)).Where(l => !string.IsNullOrWhiteSpace(l)));
+                _tips.AddRange(rawLines.Select(l => l.Trim().Split("##").First().Replace("\\n", Environment.NewLine)).Where(l => !string.IsNullOrWhiteSpace(l)));
             }
             catch (Exception e)
             {
