@@ -42,9 +42,6 @@ namespace LoadingTips.Patches
                 return;
             
             _tipsObject.SetActive(active);
-            
-            // Vanilla game doesn't show the darkened overlay immediately for some reason, let's fix that
-            HUDManager.Instance.loadingDarkenScreen.enabled = active;
         }
 
         private static void InitializeText(Transform parent)
@@ -60,16 +57,16 @@ namespace LoadingTips.Patches
             transform.localScale = new Vector3(1f, 1f, 1f);
             transform.anchorMin = new Vector2(0.5f, 0.5f);
             transform.anchorMax = new Vector2(0.5f, 0.5f);
-            transform.sizeDelta = new Vector2(500f, 100f);
-            transform.anchoredPosition3D = new Vector3(0f, -200f, 0f);
+            transform.sizeDelta = new Vector2(560f, 60f);
+            transform.anchoredPosition3D = new Vector3(180f, -138f, 0f);
             
             var tipsText = _tipsObject.GetComponent<TextMeshProUGUI>();
             tipsText.font = HUDManager.Instance.loadingText.font;
             tipsText.font.fallbackFontAssetTable.Add(HUDManager.Instance.controlTipLines[0].font);
-            tipsText.fontSize = 18;
-            tipsText.horizontalAlignment = HorizontalAlignmentOptions.Center;
+            tipsText.fontSize = 24;
+            tipsText.alignment = TextAlignmentOptions.Center;
             tipsText.enableWordWrapping = true;
-            tipsText.overflowMode = TextOverflowModes.Masking;
+            tipsText.overflowMode = TextOverflowModes.Truncate;
             tipsText.color = HUDManager.Instance.loadingText.color;
         }
     }

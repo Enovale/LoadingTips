@@ -1,3 +1,8 @@
+# v1.2.0
+
+- Update for v80
+- There is drastically less space available for text in order to make it look good. I'm really not sure what to do about it. I'm open to suggestions!
+
 # v1.1.6
 
 - Rewrote the detection of the loading screen so it works good now instead of bad.
